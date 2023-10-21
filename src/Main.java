@@ -1,4 +1,8 @@
+import service.UserService;
+
 public class Main {
     public static void main(String[] args) {
+        UserService LoginService= new UserService();
+        LoginService.run();
     }
 }
