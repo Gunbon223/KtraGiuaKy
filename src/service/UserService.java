@@ -23,40 +23,55 @@ public class UserService {
         System.out.println("2. Đăng kí");
         System.out.println("Nhập lựa chọn: ");
         int choice = Integer.parseInt(scan.nextLine());
-        switch (choice) {
-            case 1:
-                break;
-            case 2:
-                reigster();
-                break;
-            default:
-                System.out.println("Nhập sai lựa chọn vui lòng nhập lại");
+        do {
+            switch (choice) {
+                case 1:
+                    loginState = login();
+                    if (loginState=false) {
+                        break;
+                    }
+
+                case 2:
+                    reigster();
+                    break;
+                default:
+                    System.out.println("Nhập sai lựa chọn vui lòng nhập lại");
+                    loginState = false;
+            }
         }
-
+        while (loginState=false);
     }
 
-    public void Login() {
+    public boolean login() {
+        int choice;
+        System.out.print("Nhập username: ");
+        String username = scan.nextLine();
+        User user = new User();
+        if(!findUsername(username)) {
+            login();
+            return false;
+        }
+        System.out.print("Nhập password: ");
+        String password = scan.nextLine();
+        if(!passwordValidate(password)) {
+            System.out.println("Sai mật khẩu");
+            System.out.println("1. Đăng nhập lại");
+            System.out.println("2. Quên mật khẩu");
+            System.out.println("Nhập lưa chọn");
+            choice = Integer.parseInt(scan.nextLine());
+            switch (choice) {
+                case 1:
+                    login();
+                    return false;
+                case 2:
+                password = changePassword();
+                break;
+            }
+        loginUser = user;
 
+        }
+        return true;
     }
-
-//    private boolean checkLogin(String username, String password, ArrayList<User> userArrayList) {
-//        boolean loginState = false;
-//        for (User i : userArrayList) {
-//            if () {
-//                return loginState = true;
-//            }
-//            if (!i.getUsername().equals(username)) {
-//                System.out.println("Nhập sai username vui lòng nhập lại!");
-//                return loginState = false;
-//            }
-//            if (!i.getPassword().equals(password)) {
-//                System.out.println("Nhập sai password ");
-//                return loginState = false;
-//            }
-//        }
-//        return loginState;
-//    } // ktra usẻname,pass,email
-
 
 
 
@@ -140,16 +155,16 @@ public class UserService {
         System.out.println("Đổi username thành công");
     }
 
-    private void changePassword() {
+    private String changePassword() {
         System.out.println("Nhập password mới: ");
         String newPass = scan.nextLine();
         if(!passwordValidate(newPass)) {
             System.out.println("Nhập lại:");
             changePassword();
-            return;
+            return newPass;
         }
-        loginUser.setPassword(newPass);
         System.out.println("Đổi password thành công");
+        return newPass;
     }
 
     private void changeEmail() {
@@ -173,5 +188,7 @@ public class UserService {
         }
         changePassword();
     }
+
+
 
 }
