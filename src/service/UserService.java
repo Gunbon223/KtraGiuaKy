@@ -35,7 +35,7 @@ public class UserService {
                     }
                     break;
                 case 2:
-                    reigster();
+                    register();
                     loginState=false;
                     run();
                     break;
@@ -59,19 +59,16 @@ public class UserService {
         {
             case 1:
                 changeUserName();
-                userArrayList.remove(loginUser);
-                userArrayList.add(loginUser);
+                changeUserInArray();
                 loginMenu();
             case 2:
                 String newPass = changePassword();
                 loginUser.setPassword(newPass);
-                userArrayList.remove(loginUser);
-                userArrayList.add(loginUser);
+                changeUserInArray();
                 loginMenu();
             case 3:
                 changeEmail();
-                userArrayList.add(loginUser);
-                userArrayList.remove(loginUser);
+                changeUserInArray();
                 loginMenu();
             case 4:
                 loginState =false;
@@ -85,7 +82,10 @@ public class UserService {
                 loginMenu();
         }
     }
-
+    public void changeUserInArray() {
+        userArrayList.remove(loginUser);
+        userArrayList.add(loginUser);
+    }
 
     public boolean login() {
         int choice;
@@ -129,26 +129,25 @@ public class UserService {
         return true;
     }
 
-
-    public void reigster() {
+    public void register() {
         System.out.print("Nhập tên tài khoản mới: ");
         String username = scan.nextLine();
         if (findUsername(username)) {
             System.out.println("Tên đăng nhập đã tồn tại!");
-            reigster();
+            register();
             return;
         }
         System.out.print("Nhập mật khẩu mới: ");
         String password = scan.nextLine();
         if (!passwordValidate(password) ) {
-            reigster();
+            register();
             return;
         }
         System.out.print("Nhập email: ");
         String email = scan.nextLine();
         if (!emailValidate(email)||findEmail(email)) {
-            System.out.println("Email không hợp lệ hoăặc không tìm thấy tài khoản");
-            reigster();
+            System.out.println("Email không hợp lệ hoăc không tìm thấy tài khoản");
+            register();
             return;
         }
         User newUser = new User(username,password,email);
@@ -254,5 +253,12 @@ public class UserService {
     }
 
 
+    public ArrayList<User> getUserArrayList() {
+        return userArrayList;
+    }
+
+    public void setUserArrayList(ArrayList<User> userArrayList) {
+        this.userArrayList = userArrayList;
+    }
 
 }
