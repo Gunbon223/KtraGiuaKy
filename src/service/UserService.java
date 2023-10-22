@@ -29,9 +29,10 @@ public class UserService {
                     if (!loginState) {
                         System.out.println("Đăng nhập thất bại!");
                         run();
-                        break;
                     }
-                    loginMenu();
+                    else {
+                        loginMenu();
+                    }
                     break;
                 case 2:
                     reigster();
@@ -92,7 +93,7 @@ public class UserService {
         String username = scan.nextLine();
         if(!findUsername(username)) {
             System.out.println("Tên đăng nhập không tồn tại, kiểm tra lại username!");
-            return login();
+            return false;
         }
         System.out.print("Nhập password: ");
         String password = scan.nextLine();
@@ -114,12 +115,11 @@ public class UserService {
                                 i.setPassword(changePassword());
                             }
                         }
-                        run();
-                        break;
+                        return false;
                     }
                     else System.out.println("Không tìm thấy tài khoản");
                     run();
-                    break;
+                    return false;
             }
         }
         for (User i :userArrayList) {
