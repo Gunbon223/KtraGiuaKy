@@ -23,84 +23,137 @@ public class UserService {
         System.out.println("2. Đăng kí");
         System.out.println("Nhập lựa chọn: ");
         int choice = Integer.parseInt(scan.nextLine());
-        do {
             switch (choice) {
                 case 1:
                     loginState = login();
-                    if (loginState=false) {
+                    if (!loginState) {
+                        System.out.println("Đăng nhập thất bại!");
+                        run();
                         break;
                     }
-
+                    loginMenu();
+                    break;
                 case 2:
                     reigster();
+                    loginState=false;
+                    run();
                     break;
                 default:
                     System.out.println("Nhập sai lựa chọn vui lòng nhập lại");
-                    loginState = false;
+                    run();
+                    break;
             }
-        }
-        while (loginState=false);
     }
+
+    public void loginMenu() {
+        System.out.println("Menu đăng nhập: ");
+        System.out.println("1. Đổi username");
+        System.out.println("2. Đổi password");
+        System.out.println("3. Đổi email");
+        System.out.println("4. Đăng xuất");
+        System.out.println("5. Thoát");
+        System.out.println("Nhập lựa chọn");
+        int choice = Integer.parseInt(scan.nextLine());
+        switch (choice)
+        {
+            case 1:
+                changeUserName();
+                userArrayList.remove(loginUser);
+                userArrayList.add(loginUser);
+                loginMenu();
+            case 2:
+                String newPass = changePassword();
+                loginUser.setPassword(newPass);
+                userArrayList.remove(loginUser);
+                userArrayList.add(loginUser);
+                loginMenu();
+            case 3:
+                changeEmail();
+                userArrayList.add(loginUser);
+                userArrayList.remove(loginUser);
+                loginMenu();
+            case 4:
+                loginState =false;
+                loginUser =null;
+                run();
+                return;
+            case 5:
+                System.exit(0);
+            default:
+                System.out.println("Nhập sai lựa chọn vui lòng nhập lại");
+                loginMenu();
+        }
+    }
+
 
     public boolean login() {
         int choice;
         System.out.print("Nhập username: ");
         String username = scan.nextLine();
-        User user = new User();
         if(!findUsername(username)) {
-            login();
-            return false;
+            System.out.println("Tên đăng nhập không tồn tại, kiểm tra lại username!");
+            return login();
         }
         System.out.print("Nhập password: ");
         String password = scan.nextLine();
-        if(!passwordValidate(password)) {
+        if(!findPassword(password)) {
             System.out.println("Sai mật khẩu");
             System.out.println("1. Đăng nhập lại");
             System.out.println("2. Quên mật khẩu");
-            System.out.println("Nhập lưa chọn");
+            System.out.println("Nhập lưa chọn: ");
             choice = Integer.parseInt(scan.nextLine());
             switch (choice) {
                 case 1:
-                    login();
-                    return false;
+                    return login();
                 case 2:
-                password = changePassword();
-                break;
+                    System.out.println("Nhập email: ");
+                    String inputEmail = scan.nextLine();
+                    if (findEmail(inputEmail)) {
+                        for (User i : userArrayList) {
+                            if (i.getUsername().equals(username)) {
+                                i.setPassword(changePassword());
+                            }
+                        }
+                        run();
+                        break;
+                    }
+                    else System.out.println("Không tìm thấy tài khoản");
+                    run();
+                    break;
             }
-        loginUser = user;
-
+        }
+        for (User i :userArrayList) {
+            if(i.getUsername().equals(username))
+            loginUser = i;
         }
         return true;
     }
 
 
-
     public void reigster() {
-        System.out.print("Nhập tên tài khoản: ");
+        System.out.print("Nhập tên tài khoản mới: ");
         String username = scan.nextLine();
-        if (!findUsername(username)) {
+        if (findUsername(username)) {
+            System.out.println("Tên đăng nhập đã tồn tại!");
             reigster();
             return;
         }
-
-        System.out.print("Nhập mật khẩu: ");
+        System.out.print("Nhập mật khẩu mới: ");
         String password = scan.nextLine();
-        if (!passwordValidate(password)) {
+        if (!passwordValidate(password) ) {
             reigster();
             return;
         }
-
         System.out.print("Nhập email: ");
         String email = scan.nextLine();
-        if (!emailValidate(email)) {
+        if (!emailValidate(email)||findEmail(email)) {
+            System.out.println("Email không hợp lệ hoăặc không tìm thấy tài khoản");
             reigster();
             return;
         }
-
         User newUser = new User(username,password,email);
         userArrayList.add(newUser);
         System.out.println("Đăng ký thành công!");
-
     }
 
     private boolean passwordValidate(String password) {
@@ -124,30 +177,41 @@ public class UserService {
             System.out.println("Email không hợp lệ");
             return false;
         }
+        return true;
+    }
+
+    private boolean findEmail(String email) {
         for (User i : userArrayList) {
             if (i.getEmail().equals(email)) {
-                System.out.println("Email đã tồn tại");
-                return false;
+                return true;
             }
         }
-        return true;
+        return false;
     }
 
     private boolean findUsername(String username) {
         for (User i : userArrayList) {
             if (i.getUsername().equals(username)) {
-                System.out.println("Username đã tồn tại");
-                return false;
+                return true;
             }
         }
-        return true;
+        return false;
+    }
+
+    private boolean findPassword(String password) {
+        for (User i : userArrayList) {
+            if (i.getPassword().equals(password)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void changeUserName() {
-        System.out.println("Nhập user name mới: ");
+        System.out.println("Nhập tên tài khoản mới: ");
         String newUsername = scan.nextLine();
-        if(!findUsername(newUsername)) {
-            System.out.println("Nhập lại:");
+        if(findUsername(newUsername)) {
+            System.out.println("Nhập lại tên tài khoản đã tồn tại!");
             changeUserName();
             return;
         }
@@ -172,11 +236,11 @@ public class UserService {
         String newEmail = scan.nextLine();
         if(!emailValidate(newEmail)) {
             System.out.println("Nhập lại:");
-            changePassword();
+            changeEmail();
             return;
         }
         loginUser.setEmail(newEmail);
-        System.out.println("Đổi password thành công");
+        System.out.println("Đổi Email thành công");
     }
 
     private void forgetPassword() {
