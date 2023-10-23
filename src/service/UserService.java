@@ -52,7 +52,7 @@ public class UserService {
         System.out.println("2. Đổi password");
         System.out.println("3. Đổi email");
         System.out.println("4. Đăng xuất");
-        System.out.println("5. Thoát");
+        System.out.println("0. Thoát");
         System.out.println("Nhập lựa chọn");
         int choice = Integer.parseInt(scan.nextLine());
         switch (choice)
@@ -75,7 +75,7 @@ public class UserService {
                 loginUser =null;
                 run();
                 return;
-            case 5:
+            case 0:
                 System.exit(0);
             default:
                 System.out.println("Nhập sai lựa chọn vui lòng nhập lại");
@@ -151,7 +151,7 @@ public class UserService {
         System.out.print("Nhập email: ");
         String email = scan.nextLine();
         if (!emailValidate(email)||findEmail(email)) {
-            System.out.println("Email không hợp lệ hoăc không tìm thấy tài khoản");
+            System.out.println("Email không hợp lệ hoăc đã tồn tại");
             register();
             return;
         }
