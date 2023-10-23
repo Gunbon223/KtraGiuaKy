@@ -120,6 +120,9 @@ public class UserService {
                     else System.out.println("Không tìm thấy tài khoản");
                     run();
                     return false;
+                default:
+                    System.out.println("Nhập sai lựa chọn vui lòng nhập lại");
+                    return login();
             }
         }
         for (User i :userArrayList) {
@@ -128,6 +131,8 @@ public class UserService {
         }
         return true;
     }
+
+
 
     public void register() {
         System.out.print("Nhập tên tài khoản mới: ");
@@ -210,7 +215,7 @@ public class UserService {
         System.out.println("Nhập tên tài khoản mới: ");
         String newUsername = scan.nextLine();
         if(findUsername(newUsername)) {
-            System.out.println("Nhập lại tên tài khoản đã tồn tại!");
+            System.out.println("Tên tài khoản đã tồn tại!");
             changeUserName();
             return;
         }
@@ -233,7 +238,8 @@ public class UserService {
     private void changeEmail() {
         System.out.println("Nhập email mới: ");
         String newEmail = scan.nextLine();
-        if(!emailValidate(newEmail)) {
+        if(!emailValidate(newEmail)||!findEmail(newEmail)) {
+            System.out.println("Email sai định dạng hoặc đã tồn tại");
             System.out.println("Nhập lại:");
             changeEmail();
             return;
