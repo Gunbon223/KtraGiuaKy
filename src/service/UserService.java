@@ -238,7 +238,7 @@ public class UserService {
     private void changeEmail() {
         System.out.println("Nhập email mới: ");
         String newEmail = scan.nextLine();
-        if(!emailValidate(newEmail)||!findEmail(newEmail)) {
+        if(!emailValidate(newEmail)||findEmail(newEmail)) {
             System.out.println("Email sai định dạng hoặc đã tồn tại");
             System.out.println("Nhập lại:");
             changeEmail();
